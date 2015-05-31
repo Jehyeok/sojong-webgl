@@ -46,7 +46,7 @@ createObstacles();
 renderer.render(scene, camera);
 // animate();
 
-createObstacle();
+createObstacle(0, -100);
 
 function init() {
 
@@ -97,7 +97,7 @@ function createGorund() {
     scene.add( ground );
 }
 
-function createObstacle() {
+function createObstacle(x, z) {
     var obstacleHeight = 30;
     var geometry = new THREE.BoxGeometry( obstacleHeight, obstacleHeight, obstacleHeight );
     // var material = new THREE.MeshPhongMaterial( { color: 0xff0000, specular: 0xaaaaaa, shininess: 10, emissive: 0x111111 } );
@@ -105,7 +105,9 @@ function createObstacle() {
     var obstacle = new THREE.Mesh( geometry, material );
 
     obstacle.position.y += obstacleHeight / 2;
-    obstacle.position.z -= 100;
+    obstacle.position.x = x;
+    obstacle.position.z = z;
+
     scene.add( obstacle );
     renderer.render(scene, camera);
 }
@@ -231,3 +233,34 @@ document.addEventListener('keydown', function(e) {
         break;
     }
 });
+
+// 뷰어 위치 업데이트
+function getViewerPos() {
+  $.ajax({
+    url: '/get_viewer_pos',
+    type: 'GET',
+    success: function(data) {
+      console.log(data)
+      var viewerPos = viewer.position;
+      distance_from_bostacle = data.distance_from_bostacle;
+
+      if (distance_from_bostacle <= 10) {
+        // createObstacle(0, data.distance_from_bostacle);
+        
+        createObstacle(viewerPos.x + ((distance_from_bostacle + 20) * Math.cos(cameraRotateDegree * 2 * Math.PI / 360)),
+                      viewerPos.z + -((distance_from_bostacle + 20) * Math.sin(cameraRotateDegree * 2 * Math.PI / 360)));
+      }
+    },
+  });
+}
+
+function getViewerPosTest(distance_from_bostacle) {
+  var viewerPos = viewer.position;
+
+  if (distance_from_bostacle <= 50) {
+    // createObstacle(0, data.distance_from_bostacle);
+    
+    createObstacle(viewerPos.x + ((distance_from_bostacle + 20) * Math.cos(cameraRotateDegree * 2 * Math.PI / 360)),
+                  viewerPos.z + -((distance_from_bostacle + 20) * Math.sin(cameraRotateDegree * 2 * Math.PI / 360)));
+  }
+}

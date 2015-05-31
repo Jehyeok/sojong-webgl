@@ -9,6 +9,10 @@ Rails.application.routes.draw do
   # Example of regular route:
   #   get 'products/:id' => 'catalog#view'
 
+  match '/update_gps', to: 'map#update_gps', via: :POST
+  match '/get_viewer_pos', to: 'map#get_viewer_pos', via: :GET
+  match '/create_viewer', to: 'map#create_viewer', via: :GET
+
   # Example of named route that can be invoked with purchase_url(id: product.id)
   #   get 'products/:id/purchase' => 'catalog#purchase', as: :purchase
 
