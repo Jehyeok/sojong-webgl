@@ -243,7 +243,7 @@ function getViewerPos() {
 
       distance_from_bostacle = data.distance_from_bostacle;
 
-      if (distance_from_bostacle <= 10) {
+      if (distance_from_bostacle <= 50) {
         // createObstacle(0, data.distance_from_bostacle);
         
         createObstacle(viewerPos.x + ((distance_from_bostacle + 20) * Math.cos(cameraRotateDegree * 2 * Math.PI / 360)),
@@ -263,3 +263,7 @@ function getViewerPosTest(distance_from_bostacle) {
                   viewerPos.z + -((distance_from_bostacle + 20) * Math.sin(cameraRotateDegree * 2 * Math.PI / 360)));
   }
 }
+
+setInterval(function() {
+  getViewerPos();
+}, 1000)
