@@ -19,8 +19,9 @@ class MapController < ApplicationController
 		puts "lat: #{params[:gps_lat]}, long: #{params[:gps_long]}";
 
 		viewer = Viewer.find(1);
-		viewer[:latitude] = params[:gps_lat];
-		viewer[:longitude] = params[:gps_long];
+		viewer[:latitude] = params[:gps_lat]
+		viewer[:longitude] = params[:gps_long]
+		viewer[:distance_from_bostacle] = params[:distance].strip
 
 		if viewer.save
 			render plain: "success"
