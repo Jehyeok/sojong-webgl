@@ -243,9 +243,13 @@ function getViewerPos() {
       var viewerPos = viewer.position;      
 
       if (preDistance === '') {
-        distance_from_bostacle = data.distance_from_bostacle;
+        preDistance = data.distance_from_bostacle;
+        distance_from_bostacle = preDistance;
       } else if (preDistance === data.distance_from_bostacle) {
         distance_from_bostacle = 100;
+      } else {
+        preDistance = data.distance_from_bostacle;
+        distance_from_bostacle = preDistance;
       }
 
       // distance_from_bostacle = data.distance_from_bostacle;
