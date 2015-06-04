@@ -1,4 +1,5 @@
 var obstacles = [];
+var preDistance = '';
 
 function Obstacle(x, z, width, height) {
   this.x = x;
@@ -241,7 +242,13 @@ function getViewerPos() {
       camera.position.set = (data.latitude, 10, 15 - data.longitude);
       var viewerPos = viewer.position;      
 
-      distance_from_bostacle = data.distance_from_bostacle;
+      if (preDistance === '') {
+        distance_from_bostacle = data.distance_from_bostacle;
+      } else if (preDistance === data.distance_from_bostacle) {
+        distance_from_bostacle = 100;
+      }
+
+      // distance_from_bostacle = data.distance_from_bostacle;
 
       if (distance_from_bostacle <= 50) {
         // createObstacle(0, data.distance_from_bostacle);
