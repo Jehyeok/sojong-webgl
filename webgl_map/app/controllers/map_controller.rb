@@ -1,6 +1,12 @@
 class MapController < ApplicationController
 	skip_before_filter  :verify_authenticity_token
 
+	def index
+		viewer = Viewer.find(1)
+		viewer.distance_from_bostacle = 100.0
+		viewer.save!
+	end
+
 	def create_viewer
 		viewer = Viewer.create({
 			latitude: 0.0,
