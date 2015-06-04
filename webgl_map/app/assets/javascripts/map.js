@@ -17,7 +17,7 @@ function createObstacle(x, z) {
     var obstacleHeight = 30;
     var geometry = new THREE.BoxGeometry( obstacleHeight, obstacleHeight, obstacleHeight );
     // var material = new THREE.MeshPhongMaterial( { color: 0xff0000, specular: 0xaaaaaa, shininess: 10, emissive: 0x111111 } );
-    var material = new THREE.MeshPhongMaterial( { map: THREE.ImageUtils.loadTexture(buildingTexture) } );
+    var material = new THREE.MeshPhongMaterial( { map: THREE.ImageUtils.loadTexture(buildingTextures[Math.round(Math.random() * 3 - 0.5)]) } );
     var obstacle = new THREE.Mesh( geometry, material );
 
     obstacle.position.y += obstacleHeight / 2;
