@@ -34,7 +34,7 @@ function createObstacle(x, z) {
     setTimeout(function() {
       scene.remove( obstacle );
       renderer.render(scene, camera);
-    }, 10000);
+    }, 4000);
 
     renderer.render(scene, camera);
 }
