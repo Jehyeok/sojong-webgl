@@ -5,33 +5,47 @@ function Obstacle(x, z, width, height) {
   this.z = z;
   this.width = width;
   this.height = height;
+//  this.detectedNum = 0;
+  this.obj;
+}
+
+Obstacle.prototype.setObject = function(obj) {
+  this.obj = obj;
+};
+
+function createObstacle(x, z) {
+    var obstacleHeight = 30;
+    var geometry = new THREE.BoxGeometry( obstacleHeight, obstacleHeight, obstacleHeight );
+    // var material = new THREE.MeshPhongMaterial( { color: 0xff0000, specular: 0xaaaaaa, shininess: 10, emissive: 0x111111 } );
+    var material = new THREE.MeshPhongMaterial( { map: THREE.ImageUtils.loadTexture(buildingTexture) } );
+    var obstacle = new THREE.Mesh( geometry, material );
+
+    obstacle.position.y += obstacleHeight / 2;
+    obstacle.position.x = x;
+    obstacle.position.z = z;
+
+    var obstacleObj = new Obstacle(x, z, obstacleHeight, obstacleHeight);
+    obstacleObj.setObject(obstacle);
+    obstacles.push(obstacleObj);
+
+    scene.add( obstacle );
+
+    setTimeout(function() {
+      scene.remove( obstacle );
+      renderer.render(scene, camera);
+    }, 10000);
+
+    renderer.render(scene, camera);
 }
 
 function makeTestObstacles() {
-  obstacles.push(new Obstacle(100, -300, 100, 100));
-  obstacles.push(new Obstacle(-100, -300, 100, 100));
-  obstacles.push(new Obstacle(150, -400, 100, 100));
-  obstacles.push(new Obstacle(50, -500, 100, 100));
-}
-
-function createObstacles() {
-  var geometry;
-  // var material = new THREE.MeshPhongMaterial( { color: 0xff0000, specular: 0xaaaaaa, shininess: 10, emissive: 0x111111 } );
-  var material;
-  var obstacle;
-
-  for (var i = 0; i < obstacles.length; i++) {
-    geometry = new THREE.BoxGeometry( obstacles[i].width, obstacles[i].height, obstacles[i].width );
-    material = new THREE.MeshPhongMaterial( { map: THREE.ImageUtils.loadTexture(buildingTexture) } );
-    obstacle = new THREE.Mesh( geometry, material );
-    obstacle.position.y += obstacles[i].height / 2;
-    obstacle.position.x = obstacles[i].x;
-    obstacle.position.z = obstacles[i].z;
-    debugger;
-    scene.add( obstacle );
-  }
-
-  renderer.render(scene, camera);
+  // obstacles.push(new Obstacle(100, -300, 100, 100));
+  // obstacles.push(new Obstacle(-100, -300, 100, 100));
+  // obstacles.push(new Obstacle(150, -400, 100, 100));
+  // obstacles.push(new Obstacle(50, -500, 100, 100));
+  createObstacle(30, -100);
+  createObstacle(0, -100);
+  createObstacle(-30, -100);
 }
 
 var groundWidth = 5000;
@@ -42,11 +56,7 @@ var farDistance = 10000;
 
 init();
 makeTestObstacles();
-createObstacles();
 renderer.render(scene, camera);
-// animate();
-
-createObstacle(0, -100);
 
 function init() {
 
@@ -95,21 +105,6 @@ function createGorund() {
     ground.position.y -= groundWidth / 2;
     ground.receiveShadow = true;
     scene.add( ground );
-}
-
-function createObstacle(x, z) {
-    var obstacleHeight = 30;
-    var geometry = new THREE.BoxGeometry( obstacleHeight, obstacleHeight, obstacleHeight );
-    // var material = new THREE.MeshPhongMaterial( { color: 0xff0000, specular: 0xaaaaaa, shininess: 10, emissive: 0x111111 } );
-    var material = new THREE.MeshPhongMaterial( { map: THREE.ImageUtils.loadTexture(buildingTexture) } );
-    var obstacle = new THREE.Mesh( geometry, material );
-
-    obstacle.position.y += obstacleHeight / 2;
-    obstacle.position.x = x;
-    obstacle.position.z = z;
-
-    scene.add( obstacle );
-    renderer.render(scene, camera);
 }
 
 function createSkybox() {
@@ -234,21 +229,25 @@ document.addEventListener('keydown', function(e) {
     }
 });
 
-// 뷰어 위치 업데이트
 function getViewerPos() {
   $.ajax({
     url: '/get_viewer_pos',
     type: 'GET',
     success: function(data) {
-      console.log(data)
-      var viewerPos = viewer.position;
+      console.log(data);
+
+      // GPS 값으로 뷰어 업데이트
+      viewer.position.set = (data.latitude, 0, -data.longitude);
+      camera.position.set = (data.latitude, 10, 15 - data.longitude);
+      var viewerPos = viewer.position;      
+
       distance_from_bostacle = data.distance_from_bostacle;
 
       if (distance_from_bostacle <= 10) {
         // createObstacle(0, data.distance_from_bostacle);
         
         createObstacle(viewerPos.x + ((distance_from_bostacle + 20) * Math.cos(cameraRotateDegree * 2 * Math.PI / 360)),
-                      viewerPos.z + -((distance_from_bostacle + 20) * Math.sin(cameraRotateDegree * 2 * Math.PI / 360)));
+                    viewerPos.z + -((distance_from_bostacle + 20) * Math.sin(cameraRotateDegree * 2 * Math.PI / 360)));
       }
     },
   });
