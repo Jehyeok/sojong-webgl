@@ -39,6 +39,24 @@ function createObstacle(x, z) {
     renderer.render(scene, camera);
 }
 
+function createObstacleWithoutTimer(x, z) {
+    var obstacleHeight = 30;
+    var geometry = new THREE.BoxGeometry( obstacleHeight, obstacleHeight, obstacleHeight );
+    // var material = new THREE.MeshPhongMaterial( { color: 0xff0000, specular: 0xaaaaaa, shininess: 10, emissive: 0x111111 } );
+    var material = new THREE.MeshPhongMaterial( { map: THREE.ImageUtils.loadTexture(buildingTextures[Math.round(Math.random() * 3 - 0.5)]) } );
+    var obstacle = new THREE.Mesh( geometry, material );
+
+    obstacle.position.y += obstacleHeight / 2;
+    obstacle.position.x = x;
+    obstacle.position.z = z;
+
+    var obstacleObj = new Obstacle(x, z, obstacleHeight, obstacleHeight);
+    obstacleObj.setObject(obstacle);
+
+    scene.add( obstacle );
+    renderer.render(scene, camera);
+}
+
 function makeTestObstacles() {
   // obstacles.push(new Obstacle(100, -300, 100, 100));
   // obstacles.push(new Obstacle(-100, -300, 100, 100));
@@ -47,6 +65,36 @@ function makeTestObstacles() {
   createObstacle(30, -100);
   createObstacle(0, -100);
   createObstacle(-30, -100);
+
+  createObstacleWithoutTimer(-90, -200);
+  createObstacleWithoutTimer(-90, -230);
+  createObstacleWithoutTimer(-90, -290 - 30);
+
+
+  createObstacleWithoutTimer(-60, -290 - 30);
+  createObstacleWithoutTimer(-30, -290 - 30);
+  createObstacleWithoutTimer(0, -290 - 30);
+  createObstacleWithoutTimer(30, -290 - 30);
+
+  createObstacleWithoutTimer(30, -320 - 30);
+  createObstacleWithoutTimer(30, -350 - 30);
+  createObstacleWithoutTimer(30, -380 - 30);
+  createObstacleWithoutTimer(30, -410 - 30);
+
+  createObstacleWithoutTimer(0, -170);
+  createObstacleWithoutTimer(15, -200);
+  createObstacleWithoutTimer(0, -230);
+  createObstacleWithoutTimer(0, -260);
+
+  createObstacleWithoutTimer(30, -260);
+
+  createObstacleWithoutTimer(90, -290);
+  createObstacleWithoutTimer(90, -320);
+  createObstacleWithoutTimer(90, -380);
+  createObstacleWithoutTimer(90, -410);
+
+  createObstacleWithoutTimer(120, -470);
+  createObstacleWithoutTimer(90, -500);
 }
 
 var groundWidth = 5000;
